@@ -49,3 +49,4 @@ logs_raw/
 # Jupyter & doc build
 .ipynb_checkpoints/
 site/
+tests/.venv/
