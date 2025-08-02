@@ -12,4 +12,4 @@ Requires-Dist: pytest; extra == "dev"
 Requires-Dist: ruff; extra == "dev"
 Requires-Dist: build; extra == "dev"
 
-kbeta 
+kbeta

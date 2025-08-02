@@ -2,8 +2,8 @@
 
 # kbeta – *Kourkoutas‑β Optimiser*   🌞🦎🚀📈
 
-> **Research code for our upcoming paper  
-> “Kourkoutas‑β: Soft‑max Momentum with Adaptive Variance for Mesh‑Accelerated Deep Learning.”**  
+> **Research code for our upcoming paper
+> “Kourkoutas‑β: Soft‑max Momentum with Adaptive Variance for Mesh‑Accelerated Deep Learning.”**
 > The repository ships the optimiser **plus two demonstration workloads** (a 2‑D data‑driven Transformer and a 3‑D PINN).
 
 ---
@@ -23,10 +23,10 @@
 
 ## Key ideas
 
-* **Soft‑max variance tracking** to tame gradient spikes.  
-* **Two β₂ parameters**:  
-  *β₂_min* for ultra‑fast warm‑up, *β₂_max* for long‑term stability.  
-* **Layer‑wise adaptive tiny‑values** (ϵ, spike dampers) that shrink with training progress.  
+* **Soft‑max variance tracking** to tame gradient spikes.
+* **Two β₂ parameters**:
+  *β₂_min* for ultra‑fast warm‑up, *β₂_max* for long‑term stability.
+* **Layer‑wise adaptive tiny‑values** (ϵ, spike dampers) that shrink with training progress.
 * 100 % **Apple‑MLX** compatible – no PyTorch required.
 
 See detailed derivations in the forthcoming pre‑print (link will appear here).
@@ -36,7 +36,7 @@ See detailed derivations in the forthcoming pre‑print (link will appear here).
 ## Conceptual overview
 
 ### High‑level intuition – the “desert lizard” view
-*Kourkoutas‑β* is an Adam‑style optimiser whose second‑moment decay **β₂** is no longer a hard‑wired constant.  
+*Kourkoutas‑β* is an Adam‑style optimiser whose second‑moment decay **β₂** is no longer a hard‑wired constant.
 Instead, every update computes a **sun‑spike score**—a single, cheap scalar that compares the current gradient magnitude to its exponentially‑weighted history.  We then **map that score to β₂ on the fly**:
 
 | Sun‑spike | Lizard metaphor | Adaptive behaviour |
@@ -161,13 +161,13 @@ This work is distributed under the **MIT License**—see [`LICENSE`](LICENSE) fo
 
 ## Contributing & roadmap
 
-We welcome issues & PRs!  
+We welcome issues & PRs!
 Planned milestones:
 
-1. **v0.1.0** – optimiser + 2‑D Transformer demo (public).  
-2. **v0.2.0** – 3‑D PINN demo, mixed‑precision benchmarks.  
+1. **v0.1.0** – optimiser + 2‑D Transformer demo (public).
+2. **v0.2.0** – 3‑D PINN demo, mixed‑precision benchmarks.
 3. **v1.0.0** – journal paper release, pip wheels for macOS/Apple Silicon & Linux.
 
-If you run into trouble, open an issue or ping `@stavros‑k` on GitHub.  
+If you run into trouble, open an issue or ping `@stavros‑k` on GitHub.
 
 Happy sprinting in the (numerical) desert 🌞🦎🚀📈

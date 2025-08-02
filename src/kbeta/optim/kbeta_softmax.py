@@ -49,17 +49,16 @@ performs the desert-themed parameter update. Momentum (beta_m) can be added in
 the second class for smoothing out the randomness further.
 """
 
-#from typing import Callable, List, Union
-#import mlx.core as mx
-#import mlx.optimizers as optim
-#from mlx.optimizers import Adam
-#from mlx.optimizers import Optimizer
-#from mlx.utils import tree_flatten, tree_unflatten, tree_map
-
+# from typing import Callable, List, Union
+# import mlx.core as mx
+# import mlx.optimizers as optim
+# from mlx.optimizers import Adam
+# from mlx.optimizers import Optimizer
+# from mlx.utils import tree_flatten, tree_unflatten, tree_map
 
 
 import mlx.core as mx
-from mlx.optimizers import Optimizer                 # <- same base as before
+from mlx.optimizers import Optimizer  # <- same base as before
 from typing import Any, Callable, Dict, Optional
 
 
@@ -93,14 +92,14 @@ class KourkoutasSoftmaxFlex(Optimizer):
         # --- diagnostics toggle
         diagnostics: bool = False,
         # --- tiny constants -------------------------------------------------
-        tiny_spike: float = 1e-8,      # only inside sun‑spike β₂ logic
-        tiny_denom: float = 1e-8,      # only in the Adam denominator
+        tiny_spike: float = 1e-8,  # only inside sun‑spike β₂ logic
+        tiny_denom: float = 1e-8,  # only in the Adam denominator
         # --- optional features ---------------------------------------------
-        decay: Optional[float] = None,     # soft‑max AMSGrad
-        max_ratio: Optional[float] = None, # trust‑region clip
-        adaptive_tiny: bool = False,       # scale tiny_denom with |θ|
+        decay: Optional[float] = None,  # soft‑max AMSGrad
+        max_ratio: Optional[float] = None,  # trust‑region clip
+        adaptive_tiny: bool = False,  # scale tiny_denom with |θ|
         # --- bias‑correction & bookkeeping ---------------------------------
-        bias_correction: str = "none",     # "none" | "beta2max" | "exact"
+        bias_correction: str = "none",  # "none" | "beta2max" | "exact"
         warmup_steps: int = 0,
         layer_key_fn: Optional[Callable[[mx.array], Any]] = None,
         schedulers=None,
@@ -110,21 +109,21 @@ class KourkoutasSoftmaxFlex(Optimizer):
 
         # ----- (possibly) scheduled scalars --------------------------------
         self._maybe_schedule("learning_rate", learning_rate)
-        self._maybe_schedule("alpha",          alpha)
+        self._maybe_schedule("alpha", alpha)
 
         # ----- fixed hyper‑parameters -------------------------------------
-        self.beta1     = beta1
+        self.beta1 = beta1
         self.beta2_max = beta2_max
         self.beta2_min = beta2_min
-        self.eps       = eps
-        self.alpha     = alpha
+        self.eps = eps
+        self.alpha = alpha
 
         self.tiny_spike = tiny_spike
         self.tiny_denom = tiny_denom
 
         # ----- feature toggles --------------------------------------------
-        self.decay         = decay
-        self.max_ratio     = max_ratio
+        self.decay = decay
+        self.max_ratio = max_ratio
         self.adaptive_tiny = adaptive_tiny
 
         # ----- bias‑correction mode ---------------------------------------
@@ -132,18 +131,18 @@ class KourkoutasSoftmaxFlex(Optimizer):
         self.bias_correction = bias_correction
 
         # ----- misc bookkeeping -------------------------------------------
-        self.layer_key_fn   = layer_key_fn
-        self.warmup_steps   = mx.array(int(warmup_steps), dtype=mx.int64)
-        self.state["step"]  = mx.array(0, dtype=mx.int64)
+        self.layer_key_fn = layer_key_fn
+        self.warmup_steps = mx.array(int(warmup_steps), dtype=mx.int64)
+        self.state["step"] = mx.array(0, dtype=mx.int64)
         self.state["_layer_stats"] = {}
 
         # light‑weight diagnostics (float32 scalars)
-        if self._diag:                             # allocate only if needed
+        if self._diag:  # allocate only if needed
             for name, init in [
-                ("diag_max_ratio",    0.0),
-                ("diag_denom_min",    1e9),
+                ("diag_max_ratio", 0.0),
+                ("diag_denom_min", 1e9),
                 ("diag_upd_norm_max", 0.0),
-                ("diag_vhat_max",     0.0),
+                ("diag_vhat_max", 0.0),
             ]:
                 self.state[name] = mx.array(init, dtype=mx.float32)
 
@@ -171,6 +170,7 @@ class KourkoutasSoftmaxFlex(Optimizer):
 
         # ---- gather per‑group statistics ----------------------------------
         from mlx.utils import tree_map
+
         buckets: Dict[Any, Dict[str, Any]] = {}
 
         def collect(g, p, st):
@@ -200,18 +200,16 @@ class KourkoutasSoftmaxFlex(Optimizer):
 
             # dynamic β₂ (“sun‑spike”)
             cond = (self.step <= self.warmup_steps).astype(g_norm.dtype)
-            raw  = g_norm / (g_ema + self.tiny_spike)
-            sun  = (1 - cond) * (raw / (1 + raw))
+            raw = g_norm / (g_ema + self.tiny_spike)
+            sun = (1 - cond) * (raw / (1 + raw))
 
-            beta2 = (
-                cond * 0.5 * (self.beta2_min + self.beta2_max)
-                + (1 - cond) * (self.beta2_max -
-                                (self.beta2_max - self.beta2_min) * sun)
+            beta2 = cond * 0.5 * (self.beta2_min + self.beta2_max) + (1 - cond) * (
+                self.beta2_max - (self.beta2_max - self.beta2_min) * sun
             )
 
             lr = self.learning_rate.astype(sum_sq.dtype)
             b1 = self.beta1
-            
+
             if self._diag:
                 ls["last_spike"] = sun
                 ls["last_beta2"] = beta2
@@ -224,9 +222,11 @@ class KourkoutasSoftmaxFlex(Optimizer):
                 # choose v̂ (plain, AMSGrad, or soft‑max)
                 v_hat = v
                 if "v_max" in st:
-                    if self.decay is not None:             # soft‑leak
-                        st["v_max"] = mx.maximum(mx.array(self.decay, v.dtype) * st["v_max"], v)
-                    else:                                  # hard AMSGrad
+                    if self.decay is not None:  # soft‑leak
+                        st["v_max"] = mx.maximum(
+                            mx.array(self.decay, v.dtype) * st["v_max"], v
+                        )
+                    else:  # hard AMSGrad
                         st["v_max"] = mx.maximum(st["v_max"], v)
                     v_hat = st["v_max"]
 
@@ -239,17 +239,17 @@ class KourkoutasSoftmaxFlex(Optimizer):
                 # bias correction flavour
                 if self.bias_correction == "none":
                     denom = mx.sqrt(v_hat) + tiny_local + self.eps
-                    upd   = lr * m / denom
+                    upd = lr * m / denom
                 else:
                     st["beta2_cumprod"] *= beta2
-                    bc1 = 1.0 - b1 ** self.step
+                    bc1 = 1.0 - b1**self.step
                     bc2 = (
                         1.0 - st["beta2_cumprod"]
                         if self.bias_correction == "exact"
-                        else 1.0 - self.beta2_max ** self.step
+                        else 1.0 - self.beta2_max**self.step
                     )
                     denom = mx.sqrt(v_hat / bc2) + tiny_local + self.eps
-                    upd   = (lr * (m / bc1)) / denom
+                    upd = (lr * (m / bc1)) / denom
 
                 # optional trust‑region clip
                 if self.max_ratio is not None:
@@ -258,18 +258,18 @@ class KourkoutasSoftmaxFlex(Optimizer):
 
                 # diagnostics (scalar fast‑paths)
                 if self._diag:
-                
-                    self.state["diag_max_ratio"]    = mx.maximum(
+
+                    self.state["diag_max_ratio"] = mx.maximum(
                         self.state["diag_max_ratio"], mx.max(mx.abs(upd) / lr)
                     )
-                    self.state["diag_denom_min"]    = mx.minimum(
+                    self.state["diag_denom_min"] = mx.minimum(
                         self.state["diag_denom_min"], mx.min(denom)
                     )
                     self.state["diag_upd_norm_max"] = mx.maximum(
                         self.state["diag_upd_norm_max"], mx.max(mx.abs(upd))
                     )
-                    self.state["diag_vhat_max"]     = mx.maximum(
-                        self.state["diag_vhat_max"],  mx.max(v_hat)
+                    self.state["diag_vhat_max"] = mx.maximum(
+                        self.state["diag_vhat_max"], mx.max(v_hat)
                     )
 
                 # parameter update
@@ -302,20 +302,20 @@ class KourkoutasSoftmaxFlex(Optimizer):
     def snapshot_sunspike_history(self):
         """
         Collect the most‑recent sun‑spike and β₂ value per layer *as Python floats*.
-    
+
         Returns
         -------
         (spikes, betas) : tuple[list[float], list[float]]
             spikes[i] and betas[i] correspond to the same layer.
             Returns ([], []) if diagnostics are disabled.
         """
-        if not self._diag:                      # flag set in __init__()
+        if not self._diag:  # flag set in __init__()
             return [], []
-    
+
         spikes, betas = [], []
         for st in self.state["_layer_stats"].values():
-            if "last_spike" in st:              # present only when diagnostics on
+            if "last_spike" in st:  # present only when diagnostics on
                 spikes.append(float(st["last_spike"].item()))
                 betas.append(float(st["last_beta2"].item()))
-    
+
         return spikes, betas
