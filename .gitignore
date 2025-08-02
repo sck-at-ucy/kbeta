@@ -51,3 +51,4 @@ logs_raw/
 site/
 tests/.venv/
 src/kbeta.egg-info/
+src/kbeta.egg-info/
