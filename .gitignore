@@ -50,3 +50,4 @@ logs_raw/
 .ipynb_checkpoints/
 site/
 tests/.venv/
+src/kbeta.egg-info/
