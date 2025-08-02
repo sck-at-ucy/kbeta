@@ -56,10 +56,11 @@ the second class for smoothing out the randomness further.
 # from mlx.optimizers import Optimizer
 # from mlx.utils import tree_flatten, tree_unflatten, tree_map
 
+from collections.abc import Callable
+from typing import Any
 
 import mlx.core as mx
 from mlx.optimizers import Optimizer  # <- same base as before
-from typing import Any, Callable, Dict, Optional
 
 
 class KourkoutasSoftmaxFlex(Optimizer):
@@ -95,13 +96,13 @@ class KourkoutasSoftmaxFlex(Optimizer):
         tiny_spike: float = 1e-8,  # only inside sun‑spike β₂ logic
         tiny_denom: float = 1e-8,  # only in the Adam denominator
         # --- optional features ---------------------------------------------
-        decay: Optional[float] = None,  # soft‑max AMSGrad
-        max_ratio: Optional[float] = None,  # trust‑region clip
+        decay: float | None = None,  # soft‑max AMSGrad
+        max_ratio: float | None = None,  # trust‑region clip
         adaptive_tiny: bool = False,  # scale tiny_denom with |θ|
         # --- bias‑correction & bookkeeping ---------------------------------
         bias_correction: str = "none",  # "none" | "beta2max" | "exact"
         warmup_steps: int = 0,
-        layer_key_fn: Optional[Callable[[mx.array], Any]] = None,
+        layer_key_fn: Callable[[mx.array], Any] | None = None,
         schedulers=None,
     ):
         super().__init__(schedulers=schedulers)
@@ -171,7 +172,7 @@ class KourkoutasSoftmaxFlex(Optimizer):
         # ---- gather per‑group statistics ----------------------------------
         from mlx.utils import tree_map
 
-        buckets: Dict[Any, Dict[str, Any]] = {}
+        buckets: dict[Any, dict[str, Any]] = {}
 
         def collect(g, p, st):
             if g is None:
@@ -258,7 +259,6 @@ class KourkoutasSoftmaxFlex(Optimizer):
 
                 # diagnostics (scalar fast‑paths)
                 if self._diag:
-
                     self.state["diag_max_ratio"] = mx.maximum(
                         self.state["diag_max_ratio"], mx.max(mx.abs(upd) / lr)
                     )

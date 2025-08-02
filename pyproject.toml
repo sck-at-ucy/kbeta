@@ -19,3 +19,21 @@ package-dir = {"" = "src"}        # ← map root‑package namespace to “src/�
 
 [tool.setuptools.packages.find]    # ← table header **must** end with “find”
 where = ["src"]                    # ← list (not a dict!)
+
+# -------------------------------------------
+#  Ruff – linting & formatting configuration
+# -------------------------------------------
+[tool.ruff]
+target-version = "py311"
+line-length    = 88
+src            = ["src", "examples"]
+exclude        = [".venv*", "tests/.venv*"]
+
+# ----- Linter rules -------------------------
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP"]
+ignore = ["E501"]       # long lines handled by formatter
+
+# ----- Formatter (Black‑compatible) ---------
+[tool.ruff.format]
+quote-style = "double"
