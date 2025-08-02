@@ -1,3 +1,4 @@
+[![CI (macOS arm64)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml)
 
 # kbeta – *Kourkoutas‑β Optimiser*   🌞🦎🚀📈
 

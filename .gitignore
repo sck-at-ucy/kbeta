@@ -1,6 +1,29 @@
-
 # Ignore all virtual‑envs
 *.venv/
 venv/
 .env/
 
+# ───── Python virtual environments ─────
+.venv/
+venv/
+env/
+*.env/
+
+# ───── Python artefacts ─────
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+
+# ───── Build / dist artefacts ─────
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# ───── OS / editor cruft ─────
+.DS_Store
+Thumbs.db
+*.swp
