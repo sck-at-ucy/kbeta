@@ -1,0 +1,21 @@
+[build-system]
+requires      = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name            = "kbeta"
+version         = "0.0.0a0"
+description     = "Kourkoutas‑β optimiser and demo workloads"
+authors         = [{name = "Stavros Kassinos", email = "kassinos.stavros@ucy.ac.cy"}]
+readme          = "README.md"
+requires-python = ">=3.9"
+dependencies    = ["mlx", "numpy"]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "build"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}        # ← map root‑package namespace to “src/”
+
+[tool.setuptools.packages.find]    # ← table header **must** end with “find”
+where = ["src"]                    # ← list (not a dict!)

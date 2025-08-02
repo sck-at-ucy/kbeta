@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: kbeta
+Version: 0.0.0a0
+Summary: Kourkoutas‑β optimiser and demo workloads
+Author-email: Stavros Kassinos <kassinos.stavros@ucy.ac.cy>
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: mlx
+Requires-Dist: numpy
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: build; extra == "dev"
+
+kbeta 

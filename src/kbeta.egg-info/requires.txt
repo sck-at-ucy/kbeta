@@ -1,0 +1,7 @@
+mlx
+numpy
+
+[dev]
+pytest
+ruff
+build

@@ -1,0 +1,6 @@
+
+# Ignore all virtual‑envs
+*.venv/
+venv/
+.env/
+
