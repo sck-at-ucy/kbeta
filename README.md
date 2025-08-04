@@ -1,5 +1,9 @@
 [![CI (macOS arm64)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml)
 
+<p align="center">
+  <img src="assets/MLX_Kourkoutas.png" width="600"/>
+</p>
+
 # kbeta – *Kourkoutas‑β Optimiser*   🌞🦎🚀📈
 
 > **Research code for our upcoming paper
