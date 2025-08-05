@@ -20,6 +20,9 @@ package-dir = {"" = "src"}        # ← map root‑package namespace to “src/�
 [tool.setuptools.packages.find]    # ← table header **must** end with “find”
 where = ["src"]                    # ← list (not a dict!)
 
+[tool.setuptools.package-data]
+"kbeta" = ["py.typed"]
+
 # -------------------------------------------
 #  Ruff – linting & formatting configuration
 # -------------------------------------------
