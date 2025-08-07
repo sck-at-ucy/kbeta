@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name            = "kbeta"
-version         = "1.0.0"
+version         = "1.0.1a0"
 description     = "Kourkoutas‑β optimiser and demo workloads"
 authors         = [{name = "Stavros Kassinos", email = "kassinos.stavros@ucy.ac.cy"}]
 readme          = "README.md"
