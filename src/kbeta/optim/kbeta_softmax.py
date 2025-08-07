@@ -1,60 +1,109 @@
 """
-Author: Stavros Kassinos
-Date: April 2025
-Version: b.0.0.1
+Kourkoutas‑β — An Adam‑style optimiser with dynamic β₂ (“sun‑spike”) logic
+=========================================================================
 
-FullySchedulableKourkoutas & FullySchedulableKourkoutasWithMomentum
+Author   : Stavros Kassinos
+First rev: Apr 2025  –  This rev: Aug 2025 (“softmax‑flex” release)
 
-Description
------------
-The Kourkoutas family of optimizers introduces a Bayesian-flavored update rule
-where each parameter is associated with a 'posterior mean' and 'posterior variance.'
-Inspired by a desert-lizard analogy, the optimizer 'scampers' through the parameter
-space by combining new gradient information with stored memory—then throws in a bit
-of random noise for exploration. Hyperparameters like 'sand_temperature,' 'desert_haze,'
-and 'sunbathing' control how “hot and hazy” the learning environment is. Clipping terms
-(rock_bottom, rock_ceiling, grad_clip) keep updates from ‘falling off the dunes,’ while
-momentum (beta_m) can optionally give the lizard a push if you’re so inclined.
+-------------------------------------------------------------------------------
+Desert‑lizard intuition ☀️🦎
+-------------------------------------------------------------------------------
+Picture a **Kourkoutas**, the quick silver-gold lizard endemic to Cyprus.
 
-Kourkoutas can shine in problems with tricky nonconvex landscapes, especially PDEs or
-small-data setups where a bit of exploratory stochasticity helps avoid poor local minima.
-It may also do well in high-uncertainty tasks that benefit from “Bayesian-like” per-parameter
-variance tracking. On the other hand, very large or well-conditioned tasks might find its
-extra random noise unnecessary, making simpler mainstream optimizers (Adam, etc.) more direct.
-Stiff PDEs that require ultra-stable updates or real-time data streams might also be tough
-terrains for Kourkoutas unless carefully tuned.
+* **Blazing noon – Sun spikes**
+  The ground is scorching, the lizard darts erratically to keep its feet cool.
+  ⇒ Gradient variance is **high** → β₂ is *lowered* so the optimiser reacts
+  faster (less momentum smoothing, more exploration).
 
-Fun Tidbits
------------
-- “Kourkoutas” is a playful reference to a scaly desert explorer, evoking the
-  sun-baked, unpredictable environment it thrives in—much like this optimizer’s
-  noise-driven search.
-- The 'FullySchedulable' variants reflect the ambition to allow runtime updating
-  of key hyperparameters, akin to a desert climate that changes unpredictably.
-- This code was spontaneously created but has already demonstrated comparable or
-  slightly better performance than Adam in some PDE-based PINN tests.
+* **Mild morning / dusk**
+  The sand is cool, the lizard moves in long, measured strides.
+  ⇒ Gradient variance is **low** → β₂ gravitates toward **β₂₍max₎**
+  (behaviour converges to vanilla Adam for steady refinement).
 
-Wrapping Up
------------
-- Likely to excel at:
-  * PDE-based problems, small-data or nonconvex tasks, and problems needing
-    robust exploration or “Bayesian-like” uncertainty handling.
-- Likely to struggle at:
-  * Very large, data-rich tasks that don’t need as much exploration.
-  * Extremely stiff PDE constraints demanding very stable updates.
+Implementation
+~~~~~~~~~~~~~~
+For each layer we keep an EWMA of the gradient norm, `grad_ema`.
+A “sun‑spike” scalar
 
-Refer to the classes below for usage details. They share a similar structure:
-`init_single` sets up 'posterior_mean' and 'posterior_var,' then `apply_single`
-performs the desert-themed parameter update. Momentum (beta_m) can be added in
-the second class for smoothing out the randomness further.
+    sun = ‖g‖ / (‖grad_ema‖ + tiny_spike)  ∈ [0, 1]
+
+modulates β₂ between user‑defined bounds **β₂_min ≤ β₂ ≤ β₂_max**:
+
+    β₂ = β₂_max − (β₂_max − β₂_min) · sun
+
+Low *sun* ⇒ β₂ ≈ β₂_max (conservative)
+High *sun* ⇒ β₂ ≈ β₂_min (agile)
+
+-------------------------------------------------------------------------------
+Key additions over Adam / AMSGrad
+-------------------------------------------------------------------------------
+• Layer‑wise sun‑spike β₂ (see above).
+• **Soft‑max AMSGrad** (`decay∈(0,1]`) – gently leaks the running v‑max buffer.
+• **Trust‑region clip** (`max_ratio`) – caps |Δθ| ≤ lr·max_ratio.
+• **Adaptive tiny term** (`adaptive_tiny`) – scales *eps* with ⟨|θ|⟩.
+• **Diagnostics toggle** (`diagnostics`) – ultra‑cheap per‑epoch stats
+  for plotting (sun‑spike, β₂, denom min, etc.).
+
+All toggles default to **off**, so *Kourkoutas‑β collapses to Adam* when
+`beta2_min == beta2_max == 0.999` and extras are disabled.
+
+-------------------------------------------------------------------------------
+When to try it
+-------------------------------------------------------------------------------
+✅ PDE & physics‑informed nets  ✅ small / noisy data  ✅ spiky gradients
+❌ Huge, well‑conditioned vision/LN tasks where plain Adam already excels
+
+-------------------------------------------------------------------------------
+Quick‑start snippets
+-------------------------------------------------------------------------------
+**PINN setting**
+
+```python
+from kbeta.optim import KourkoutasSoftmaxFlex as Kβ
+
+opt = Kβ(
+    learning_rate = lr_schedule,
+    beta1         = 0.90,
+    beta2_max     = 0.999,                 # calm coasting
+    beta2_min     = 0.88,                  # agile under spikes
+    eps           = 1e-8,
+    alpha         = 0.93,                  # EWMA for grad_ema
+    tiny_spike    = 1e-9,
+    tiny_denom    = 1e-8,
+    decay         = 0.98,                  # soft‑max AMSGrad
+    adaptive_tiny = True,
+    max_ratio     = 3,
+    bias_correction = "beta2max",
+    layer_key_fn  = lambda p: p.shape,
+    diagnostics   = True,                  # enables snapshot helpers
+)
+```
+
+**Transformer setting**
+
+```python
+from kbeta.optim import KourkoutasSoftmaxFlex as Kβ
+
+opt = Kβ(
+    learning_rate = 1e-3,
+    beta1         = 0.90,
+    beta2_max     = 0.999,                  # calm coasting
+    beta2_min     = 0.88,                   # agile under spikes
+    eps           = 1e-8,
+    alpha         = 0.93,
+    adaptive_tiny = False,                  # often off for Transformer stacks
+    layer_key_fn  = lambda p: p.shape,
+    warmup_steps  = 350,
+    diagnostics   = ARGS.kour_diagnostics,  # enables snapshot helpers
+)
+```
+
+Inside your training loop you can call
+spikes, betas = opt.snapshot_sunspike_history()
+to feed violin/heat‑map plots.
+
+Happy scurrying!  – Stavros
 """
-
-# from typing import Callable, List, Union
-# import mlx.core as mx
-# import mlx.optimizers as optim
-# from mlx.optimizers import Adam
-# from mlx.optimizers import Optimizer
-# from mlx.utils import tree_flatten, tree_unflatten, tree_map
 
 from collections.abc import Callable
 from typing import Any
