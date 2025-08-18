@@ -53,5 +53,10 @@ tests/.venv/
 src/kbeta.egg-info/
 src/kbeta.egg-info/
 
+# examples data and assets
+examples/**/data/
+examples/**/datasets/
+examples/**/small-enwik8.txt
+
 # macOS
 *.DS_Store
