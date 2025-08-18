@@ -19,12 +19,14 @@ venv/
 env/
 *.env/
 *.venv/
+.venv*/
 .vscode/
 .idea/
 .DS_Store
 
 # Python artefacts
 __pycache__/
+*.pyc
 *.py[cod]
 *.pyo
 *.so

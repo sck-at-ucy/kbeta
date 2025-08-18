@@ -23,13 +23,16 @@ Picture a **Kourkoutas**, the quick silver-gold lizard endemic to Cyprus.
 Implementation
 ~~~~~~~~~~~~~~
 For each layer we keep an EWMA of the gradient norm, `grad_ema`.
-A “sun‑spike” scalar
 
-    sun = ‖g‖ / (‖grad_ema‖ + tiny_spike)  ∈ [0, 1]
+A “sun‑spike” scalar, using a bounded squash:
 
-modulates β₂ between user‑defined bounds **β₂_min ≤ β₂ ≤ β₂_max**:
+    raw = ‖g‖ / (grad_ema + tiny_spike)      ∈ (0, ∞)
+    sun = raw / (1 + raw)                    ∈ [0, 1)
 
-    β₂ = β₂_max − (β₂_max − β₂_min) · sun
+During warm‑up (step ≤ warmup_steps), we hold sun = 0 and set
+β₂ = ½(β₂_min + β₂_max). After warm‑up:
+
+    β₂ = β₂_max − (β₂_max − β₂_min) · sun
 
 Low *sun* ⇒ β₂ ≈ β₂_max (conservative)
 High *sun* ⇒ β₂ ≈ β₂_min (agile)
@@ -120,13 +123,16 @@ class KourkoutasSoftmaxFlex(Optimizer):
     --------------------------------------------------------------------------
     QUICK REFERENCE
     --------------------------------------------------------------------------
-    decay        – 0 < decay ≤ 1.  Soft leak of the `v_max` buffer
-                   (classic AMSGrad ⇒ decay=None).
-    max_ratio    – Trust‑region cap, applied as  |Δθ| ≤ lr · max_ratio.
-    adaptive_tiny– Adds an *extra* tiny term that scales with ⟨|θ|⟩.
-                   When False the classic Adam denominator √v + eps is used.
+    decay        – None: disable AMSGrad (unless max_ratio implies v_max);
+                   1.0 : hard AMSGrad (non‑decreasing v_max);
+                   (0,1): leaky‑AMSGrad (soft‑max bound);
+                   0.0 : degenerate (v̂_t = v_t).
+    max_ratio    – Trust‑region cap, applied as |Δθ| ≤ lr·max_ratio.
+    adaptive_tiny– Adds an extra tiny term that scales with ⟨|θ⟩.
+                   When False the classic Adam denominator √v + eps is used.
 
-    All three knobs default to “off”, preserving vanilla (“violin”) behaviour.
+    All three knobs default to “off”, preserving vanilla Adam when
+    decay=None, max_ratio=None, adaptive_tiny=False and β₂ is fixed.
     """
 
     # ─────────────────────────── initialisation ────────────────────────────

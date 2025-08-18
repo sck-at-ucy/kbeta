@@ -1,7 +1,7 @@
 import mlx.core as mx
 import mlx.nn as nn
 
-from kbeta.optim import KourkoutasSoftmaxFlex
+from kbeta import KourkoutasSoftmaxFlex
 
 
 class Dummy(nn.Module):
