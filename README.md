@@ -5,7 +5,7 @@
   <img src="assets/MLX_Kourkoutas.png" width="600"/>
 </p>
 
-# # <img src="assets/kourkoutas_logo_40px.png" alt="logo" width="40"/> kbeta – *Kourkoutas-β Optimiser* 🌞🦎🚀📈
+# kbeta – *Kourkoutas‑β Optimiser*   🌞🦎🚀📈
 
 > Reference implementation of **Kourkoutas‑β: A Sunspike‑Driven Adam Optimizer with Desert Flair**
 > Published as [arXiv:2508.12996](http://arxiv.org/abs/2508.12996).
