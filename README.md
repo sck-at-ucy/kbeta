@@ -1,5 +1,6 @@
 [![CI (macOS arm64)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml)
 [![PyPI version](https://badge.fury.io/py/kbeta.svg)](https://pypi.org/project/kbeta/)
+[![DOI](https://zenodo.org/badge/1030535201.svg)](https://doi.org/10.5281/zenodo.16902741)
 
 <p align="center">
   <img src="assets/MLX_Kourkoutas.png" width="600"/>
@@ -316,6 +317,7 @@ Continuous Integration (CI) runs these checks automatically.
 
 If you use this code or method in your research, please cite:
 
+**Paper (arXiv preprint)**
 ```bibtex
 @article{Kassinos2025Kourkoutas,
   title   = {Kourkoutas-β: A Sunspike-Driven Adam Optimizer with Desert Flair},
@@ -323,6 +325,18 @@ If you use this code or method in your research, please cite:
   journal = {arXiv preprint arXiv:2508.12996},
   year    = {2025},
   url     = {http://arxiv.org/abs/2508.12996}
+}
+```
+** Software (Zenodo archive**)
+```bibtex
+@software{kassinos2025kourkoutasbeta,
+  author       = {Stavros Kassinos},
+  title        = {Kourkoutas-β: A Sunspike-Driven Adam Optimizer with Desert Flair},
+  year         = 2025,
+  publisher    = {Zenodo},
+  version      = {1.0.0},
+  doi          = {10.5281/zenodo.16902741},
+  url          = {https://doi.org/10.5281/zenodo.16902741}
 }
 ```
 
