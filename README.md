@@ -144,15 +144,18 @@ print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters
 
 ## Example workloads
 
+**Important: 👉 👉 The 2‑D Transformer (Heat2D, Testbed A) and 3‑D PINN (Heat3D, Testbed B) of the paper are released as separate repositories:
+- [kbeta-transformer2d](https://github.com/sck-at-ucy/kbeta-transformer2d)
+- [kbeta-pinn3d](https://github.com/sck-at-ucy/kbeta-pinn3d)
+
+This repo includes Transformer – Testbed D (Char-level LM on small-enwik8)
+
 | Folder | Paper section | What it shows | How to run |
 |--------|---------------|---------------|------------|
 | `examples/transformer_char_lm` | § 6.4 (Testbed D) | Character‑level LM on *small‑enwik8* | `python examples/transformer_char_lm/testbed_d.py --text ./data/small_enwik8.txt --opt kbeta` |
 
-👉 👉 The 2‑D Transformer (Heat2D, Testbed A) and 3‑D PINN (Heat3D, Testbed B) of the paper are released as separate repositories:
-- [kbeta-transformer2d](https://github.com/sck-at-ucy/kbeta-transformer2d)
-- [kbeta-pinn3d](https://github.com/sck-at-ucy/kbeta-pinn3d)
 
-### Transformer – Testbed D (Char-level LM on small-enwik8)
+### Running Transformer – Testbed D (Char-level LM on small-enwik8)
 
 All commands assume running from the **repo root** (adjust accordingly)
 👉 Make sure you have generated `./data/small-enwik8.txt` and the `./logs_enwi` directory as described below.
