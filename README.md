@@ -301,7 +301,7 @@ pre-commit run --all   # run all hooks (if installed)
 Continuous Integration (CI) runs these checks automatically.
 
 ---
-### Further Reading
+## Further Reading
 
 | Resource | Why it Matters for **Kourkoutas-β** & **kbeta** |
 |----------|------------------------------------------------|
