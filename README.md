@@ -137,7 +137,8 @@ for _ in range(num_iters):
 toc = time.time()
 
 error_norm = float(mx.linalg.norm(model.w - w_star))
-print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters/(toc-tic):.1f} it/s")
+print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f},
+      Throughput={num_iters/(toc-tic):.1f} it/s")
 ```
 
 ---
