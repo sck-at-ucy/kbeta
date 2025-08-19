@@ -26,7 +26,7 @@ This repository provides the optimiser implementation together with example work
 9. [Optimizers and settings](#optimizers-and-settings)
 10. [Companion repositories](#companion-repositories)
 11. [Tests & linting](#tests--linting)
-12. [Further reading](#further--reading)
+12. [Further reading](#further-reading)
 13. [Citation](#citation)
 14. [License](#license)
 15. [Contributing & roadmap](#contributing--roadmap)
