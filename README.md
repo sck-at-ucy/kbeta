@@ -71,9 +71,11 @@ kbeta
 │   └── transformer_char_lm/     # Testbed D: character‑level LM on small‑enwik8
 │
 ├── tests/                       # pytest suite (smoke + ablation tests)
-├── assets/                      # logo and figures
+├── assets/                      # logo and figure
 ├── pyproject.toml
-└── README.md                    # you are here
+├── MANIFEST.in
+├── README.md
+└── LICENSE
 ```
 
 ---
@@ -206,7 +208,7 @@ All commands assume running from the **repo root** (adjust accordingly)
 Run the Transformer training with the same options used in the paper (adapted to the repo paths):
 
 ```bash
-  python -u src/kbeta/examples/transformer_char_lm/testbed_d.py --text ./data/small-enwik8.txt     --steps 50001 --batch 4 --d_model 512 --n_layer 6 --n_head 8     --ctx 512 --lmin 16 --lmax 512 --warmup 250 --opt kbeta --adam_beta2 0.95     --layer_bucket per-array --barrier_every 100 --eval_every 500     --lr 1e-3     --seed 0 --fixed_eval_seed 1234 --deterministic --compile     --wd 0.0 --lr_schedule "1:1e-3,30000:5e-4,40000:1e-4,60000:1e-5"     2>&1 | tee "logs_enwik/kbeta_seed0.log"
+  python -u examples/transformer_char_lm/testbed_d.py --text ./data/small-enwik8.txt     --steps 50001 --batch 4 --d_model 512 --n_layer 6 --n_head 8     --ctx 512 --lmin 16 --lmax 512 --warmup 250 --opt kbeta --adam_beta2 0.95     --layer_bucket per-array --barrier_every 100 --eval_every 500     --lr 1e-3     --seed 0 --fixed_eval_seed 1234 --deterministic --compile     --wd 0.0 --lr_schedule "1:1e-3,30000:5e-4,40000:1e-4,60000:1e-5"     2>&1 | tee "logs_enwik/kbeta_seed0.log"
 ```
 
 This reproduces a run that mirros the testbed reported in the paper with full logging under `logs_enwik/`.
