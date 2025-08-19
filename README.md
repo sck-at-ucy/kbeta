@@ -142,7 +142,7 @@ print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters
 
 | Folder | Paper section | What it shows | How to run |
 |--------|---------------|---------------|------------|
-| `examples/transformer_char_lm` | § 4.4 (Testbed D) | Character‑level LM on *small‑enwik8* | `python examples/transformer_char_lm/testbed_d.py --text ./data/small_enwik8.txt --opt kbeta` |
+| `examples/transformer_char_lm` | § 6.4 (Testbed D) | Character‑level LM on *small‑enwik8* | `python examples/transformer_char_lm/testbed_d.py --text ./data/small_enwik8.txt --opt kbeta` |
 
 The 2‑D Transformer (Heat2D, Testbed A) and 3‑D PINN (Heat3D, Testbed B) are released as separate repositories:
 - [kbeta-transformer2d](https://github.com/sck-at-ucy/kbeta-transformer2d)
