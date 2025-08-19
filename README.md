@@ -148,7 +148,7 @@ print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters
 - [kbeta-transformer2d](https://github.com/sck-at-ucy/kbeta-transformer2d)
 - [kbeta-pinn3d](https://github.com/sck-at-ucy/kbeta-pinn3d)
 
-This repo includes Transformer – Testbed D (Char-level LM on small-enwik8)
+This repo includes the Transformer – Testbed D (Char-level LM on small-enwik8)
 
 | Folder | Paper section | What it shows | How to run |
 |--------|---------------|---------------|------------|
