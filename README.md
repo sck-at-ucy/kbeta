@@ -17,7 +17,7 @@ This repository provides the optimiser implementation together with example work
 1. [Key ideas](#key-ideas)
 2. [Project layout](#project-layout)
 3. [Quick start](#quick-start)
-4. [Instalation](#instalation)
+4. [Installation](#installation)
 5. [Using Kourkoutas‑β in your own model](#minimal-example)
 6. [Example workloads](#example-workloads)
 7. [Dataset and creation (verifiable)](#dataset-and-creation-verifiable)
