@@ -229,7 +229,18 @@ As in the provided script, we train:
   MLX Adam (β₁=0.9, β₂=0.999, ε=1e‑8), bias correction on.
 
 ---
+## Companion repositories
 
+This repository hosts the **core optimizer implementation** and the **char-level Transformer example** (Testbed D).
+
+Other workloads from the paper are available in dedicated repositories:
+
+- [**kbeta-transformer2d**](https://github.com/sck-at-ucy/kbeta-transformer2d) – 2-D Transformer surrogate for Heat2D (Testbed A).
+- [**kbeta-pinn3d**](https://github.com/sck-at-ucy/kbeta-pinn3d) – 3-D Physics-Informed Neural Network for Heat3D (Testbed B).
+
+These companion repos share the same optimizer API and training protocol, so you can directly apply `KourkoutasBeta` with no code changes.
+
+===
 ## Tests & linting
 
 ```bash
