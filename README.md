@@ -146,13 +146,13 @@ print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters
 
 ### Transformer – Testbed D (Char-level LM on small-enwik8)
 
-All commands should be run from the **repo root**.
-👉Make sure you have generated `./data/small-enwik8.txt` as described below.
+All commands assume running from the **repo root** (adjust accordingly)
+👉 Make sure you have generated `./data/small-enwik8.txt` and the `./logs_enwi` directory as described below.
 
-Run the Transformer training with the same options used in the paper (adapted to the new script path):
+Run the Transformer training with the same options used in the paper (adapted to the repo paths):
 
 ```bash
-  python -u examples/transformer_char_lm/testbed_d.py --text ./data/small-enwik8.txt     --steps 50001 --batch 4 --d_model 512 --n_layer 6 --n_head 8     --ctx 512 --lmin 16 --lmax 512 --warmup 250 --opt kbeta --adam_beta2 0.95     --layer_bucket per-array --barrier_every 100 --eval_every 500     --lr 1e-3     --seed "$seed" --fixed_eval_seed 1234 --deterministic --compile     --wd 0.0 --lr_schedule "1:1e-3,30000:5e-4,40000:1e-4,60000:1e-5"     2>&1 | tee "logs_enwik/kbeta_seed${seed}.log"
+  python -u src/kbeta/examples/transformer_char_lm/testbed_d.py --text ./data/small-enwik8.txt     --steps 50001 --batch 4 --d_model 512 --n_layer 6 --n_head 8     --ctx 512 --lmin 16 --lmax 512 --warmup 250 --opt kbeta --adam_beta2 0.95     --layer_bucket per-array --barrier_every 100 --eval_every 500     --lr 1e-3     --seed 0 --fixed_eval_seed 1234 --deterministic --compile     --wd 0.0 --lr_schedule "1:1e-3,30000:5e-4,40000:1e-4,60000:1e-5"     2>&1 | tee "logs_enwik/kbeta_seed0.log"
 ```
 
 This reproduces a run that mirros the testbed reported in the paper with full logging under `logs_enwik/`.
@@ -169,6 +169,7 @@ curl -L -o enwik8.zip https://data.deepai.org/enwik8.zip
 unzip enwik8.zip
 head -c 30000000 enwik8 > small-enwik8.txt
 mkdir -p data && mv small-enwik8.txt data/
+mkdir ./logs_enwik
 ```
 
 Checksums on our machine:
