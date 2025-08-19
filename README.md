@@ -40,13 +40,16 @@ See the paper for derivations, experiments, and theoretical analysis.
 
 ## Conceptual overview
 
-*Kourkoutas‑β* is an Adam‑style optimiser whose second‑moment decay **β₂** is adapted on the fly.
-A **sun‑spike score** compares the current gradient norm to its exponentially‑weighted history, then maps that score to β₂ dynamically:
+### High‑level intuition – the “desert lizard” view
+*Kourkoutas‑β* is an Adam‑style optimiser whose second‑moment decay **β₂** is no longer a hard‑wired constant.
+Instead, every update computes a **sun‑spike score**—a single, cheap scalar that compares the current gradient magnitude to its exponentially‑weighted history.  We then **map that score to β₂ on the fly**:
 
 | Sun‑spike | Lizard metaphor | Adaptive behaviour |
 |-----------|-----------------|--------------------|
-| **High**  | The desert sun is scorching — the lizard is “fully warmed up” and sprints. | **Lower β₂ toward β₂_min** → shorter memory, rapid adaptation. |
-| **Low**   | It’s cool; the lizard takes cautious steps. | **Raise β₂ toward β₂_max** → longer memory, smoothing noise. |
+| **High**  | The desert sun is scorching — the lizard is “fully warmed up” and sprints. | **Lower β₂ toward β₂,min** → second‑moment memory shortens, allowing rapid, large parameter moves. |
+| **Low**   | It’s cool; the lizard feels sluggish and takes cautious steps. | **Raise β₂ toward β₂,max** → longer memory, filtering noise and producing steadier updates. |
+
+Because the sun‑spike diagnostic **exists only in Kourkoutas‑β**, the method can be viewed as *Adam with a temperature‑controlled β₂ schedule*: warm gradients trigger exploration; cooler gradients favour exploitation and stability.
 
 ---
 
