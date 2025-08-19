@@ -301,15 +301,15 @@ pre-commit run --all   # run all hooks (if installed)
 Continuous Integration (CI) runs these checks automatically.
 
 ---
-### Further reading
+### Further Reading
 
-| Resource | Why it Matters for **Kourkoutas‑β** & **kbeta‑transformer2d** |
-|----------|--------------------------------------------------------------|
-| **MLX Beyond Language (repo)**<br>https://github.com/sck-at-ucy/MLX_BeyondLanguage | Companion project that demonstrates how to scale MLX Transformer workloads *beyond* conventional language‑model settings (e.g. vision & physics). Provides many of the coding conventions, dataset helpers and plotting utilities reused here. |
-| **MLX framework (Apple)**<br>https://github.com/ml-explore/mlx | The underlying tensor/NN library that powers both Kourkoutas‑β *and* the 2‑D Transformer. Understanding MLX’s compile/runtime model explains why adaptive optimisers like Kourkoutas‑β can hit full Metal GPU speed without custom CUDA kernels. |
-| **Article: *Soft‑max Momentum with Adaptive Variance…***<br>https://www.sciencedirect.com/science/article/pii/S2590123025009478 | The forthcoming paper describing Kourkoutas‑β in detail—mathematical derivation, convergence proofs and ablation studies. Read this to see why β₂ must be a dynamic *distribution* rather than a constant 0.999. |
-| **kbeta (core optimiser)**<br>https://github.com/sck-at-ucy/kbeta | Stand‑alone Python package implementing Kourkoutas‑β. `kbeta_transformer2d` imports `KourkoutasSoftmaxFlex` from *this* repo; all optimiser‑level issues/PRs belong there. |
-| **kbeta‑pinn3d (PINN benchmark)**<br>https://github.com/sck-at-ucy/kbeta-pinn3d | 3‑D Physics‑Informed Neural Network (PINN) workload that **collects β₂ “spike” diagnostics** during training. Useful if you want to compare how Kourkoutas‑β behaves on PDE‑constrained training vs. the fully data‑driven 2‑D Transformer shown here. |
+| Resource | Why it Matters for **Kourkoutas-β** & **kbeta** |
+|----------|------------------------------------------------|
+| **MLX Beyond Language (repo)**<br>https://github.com/sck-at-ucy/MLX_BeyondLanguage | Companion project that demonstrates how to scale MLX Transformer workloads *beyond* language (e.g., physics, vision). Provides coding conventions, dataset helpers, and plotting utilities reused in `kbeta` examples. |
+| **MLX framework (Apple)**<br>https://github.com/ml-explore/mlx | The underlying tensor/NN library that powers `kbeta`. Understanding MLX’s compile/runtime model explains why adaptive optimisers like Kourkoutas-β can hit full Metal GPU speed without CUDA. |
+| **Article: *Kourkoutas-β: An Adam-style Optimizer with Dynamic Memory for Bursty Gradients***<br>https://arxiv.org/abs/2508.12996 | The permanent arXiv link to the paper introducing Kourkoutas-β, with derivation, convergence analysis, and ablations. |
+| **kbeta-transformer2d (Heat2D benchmark)**<br>https://github.com/sck-at-ucy/kbeta-transformer2d | 2-D Transformer surrogate workload (Testbed A). Demonstrates how Kourkoutas-β performs on PDE-constrained sequence modeling. 🔒 Currently private; will be released publicly soon. |
+| **kbeta-pinn3d (PINN benchmark)**<br>https://github.com/sck-at-ucy/kbeta-pinn3d | 3-D Physics-Informed Neural Network workload (Testbed B) that logs β₂ “spike” diagnostics during training. Lets you compare Kourkoutas-β on PDE-constrained PINNs vs. data-driven Transformers. 🔒 Currently private; will be released publicly soon. |
 
 ---
 ## Citation
