@@ -1,4 +1,5 @@
 [![CI (macOS arm64)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml)
+[![PyPI version](https://badge.fury.io/py/kbeta.svg)](https://pypi.org/project/kbeta/)
 
 <p align="center">
   <img src="assets/MLX_Kourkoutas.png" width="600"/>
