@@ -94,27 +94,46 @@ pytest -q
 
 ## Minimal example
 
-```python
+```import time
 import mlx.core as mx
 import mlx.nn as nn
-from kbeta import KourkoutasBeta  # alias for KourkoutasSoftmaxFlex
+from kbeta import KourkoutasBeta
 
-# dummy single‑parameter model
-class Dummy(nn.Module):
+num_features, num_examples, num_iters, lr = 100, 1000, 1000, 0.01
+
+# True parameters and data
+w_star = mx.random.normal((num_features,))
+X = mx.random.normal((num_examples, num_features))
+y = X @ w_star + 1e-2 * mx.random.normal((num_examples,))
+
+# Simple model with one parameter
+class Model(nn.Module):
     def __init__(self):
         super().__init__()
-        self.w = mx.zeros((3,))
+        self.w = mx.zeros((num_features,))
 
     def __call__(self, x):
-        return (self.w * x).sum()
+        return x @ self.w
 
-model = Dummy()
-opt = KourkoutasBeta(learning_rate=1e-3)
+model = Model()
+
+def loss_fn(m):
+    return 0.5 * mx.mean(mx.square(m(X) - y))
+
+opt = KourkoutasBeta(learning_rate=lr)
 opt.init(model.parameters())
 
-x = mx.ones((3,))
-loss, grads = nn.value_and_grad(model)(model, x)
-opt.update(model, grads)  # one training step
+grad_fn = nn.value_and_grad(model,loss_fn)
+
+tic = time.time()
+for _ in range(num_iters):
+    loss, grads = grad_fn(model)
+    opt.update(model, grads)
+    mx.eval(model.parameters())
+toc = time.time()
+
+error_norm = float(mx.linalg.norm(model.w - w_star))
+print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters/(toc-tic):.1f} it/s")
 ```
 
 ---
