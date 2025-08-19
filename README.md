@@ -141,8 +141,7 @@ This installs the package in editable mode and makes all example scripts availab
 
 ## Minimal example
 
-```python
-import time
+```import time
 import mlx.core as mx
 import mlx.nn as nn
 from kbeta import KourkoutasBeta
@@ -171,7 +170,7 @@ def loss_fn(m):
 opt = KourkoutasBeta(learning_rate=lr)
 opt.init(model.parameters())
 
-grad_fn = nn.value_and_grad(loss_fn)
+grad_fn = nn.value_and_grad(model,loss_fn)
 
 tic = time.time()
 for _ in range(num_iters):
@@ -181,8 +180,8 @@ for _ in range(num_iters):
 toc = time.time()
 
 error_norm = float(mx.linalg.norm(model.w - w_star))
-print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f},
-      Throughput={num_iters/(toc-tic):.1f} it/s")
+print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f} "
+      f"Throughput={num_iters/(toc-tic):.1f} it/s")
 ```
 
 ---
