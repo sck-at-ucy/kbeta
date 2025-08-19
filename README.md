@@ -240,7 +240,7 @@ Other workloads from the paper are available in dedicated repositories:
 
 These companion repos share the same optimizer API and training protocol, so you can directly apply `KourkoutasBeta` with no code changes.
 
-===
+---
 ## Tests & linting
 
 ```bash
