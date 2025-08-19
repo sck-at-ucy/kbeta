@@ -8,3 +8,14 @@ authors:
 doi: 10.5281/zenodo.16902741
 version: "1.0.0"
 date-released: 2025-08-19
+repository-code: "https://github.com/sck-at-ucy/kbeta"
+license: MIT
+preferred-citation:
+  type: software
+  authors:
+    - family-names: "Kassinos"
+      given-names: "Stavros"
+  title: "Kourkoutas-β: A Sunspike-Driven Adam Optimizer with Desert Flair"
+  version: "1.0.0"
+  doi: "10.5281/zenodo.16902741"
+  url: "https://doi.org/10.5281/zenodo.16902741"
