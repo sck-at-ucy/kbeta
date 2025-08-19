@@ -17,6 +17,7 @@ This repository provides the optimiser implementation together with example work
 1. [Key ideas](#key-ideas)
 2. [Project layout](#project-layout)
 3. [Quick start](#quick-start)
+4. [Instalation](#instalation)
 4. [Using Kourkoutas‑β in your own model](#minimal-example)
 5. [Example workloads](#example-workloads)
 6. [Dataset and creation (verifiable)](#dataset-and-creation-verifiable)
@@ -93,6 +94,46 @@ pip install -e ".[dev]"
 # 4. run the smoke + ablation tests
 pytest -q
 ```
+---
+
+## Installation
+
+### Option 1: PyPI wheels (end-users)
+
+If you only want the optimiser in your own MLX projects, install from PyPI:
+
+```bash
+pip install kbeta
+```
+
+This gives you just the `kbeta` package with the latest MLX.
+
+For development tools and examples:
+
+```bash
+pip install "kbeta[dev]"
+```
+
+For exact reproducibility of the paper results (MLX 0.26.3, Adam-95/999 baselines):
+
+```bash
+pip install "kbeta[repro]"
+```
+
+---
+
+### Option 2: Cloning the repo (researchers / contributors)
+
+If you want to run the example workloads or contribute to development, clone the repo:
+
+```bash
+git clone https://github.com/sck-at-ucy/kbeta.git
+cd kbeta
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+```
+
+This installs the package in editable mode and makes all example scripts available.
 
 ---
 
