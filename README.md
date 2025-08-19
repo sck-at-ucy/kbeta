@@ -1,6 +1,6 @@
 [![CI (macOS arm64)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sck-at-ucy/kbeta/actions/workflows/ci.yml)
 [![PyPI version](https://badge.fury.io/py/kbeta.svg)](https://pypi.org/project/kbeta/)
-[![DOI](https://zenodo.org/badge/1030535201.svg)](https://doi.org/10.5281/zenodo.16902741)
+[![DOI](https://zenodo.org/badge/1030535201.svg)](https://doi.org/10.5281/zenodo.16902740)
 
 <p align="center">
   <img src="assets/MLX_Kourkoutas.png" width="600"/>
