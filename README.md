@@ -144,7 +144,7 @@ print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters
 
 ## Example workloads
 
-**Important: 👉 👉 The 2‑D Transformer (Heat2D, Testbed A) and 3‑D PINN (Heat3D, Testbed B) of the paper are released as separate repositories:
+**Important**: 👉 👉 The 2‑D Transformer (Heat2D, Testbed A) and 3‑D PINN (Heat3D, Testbed B) of the paper are released as separate repositories:
 - [kbeta-transformer2d](https://github.com/sck-at-ucy/kbeta-transformer2d)
 - [kbeta-pinn3d](https://github.com/sck-at-ucy/kbeta-pinn3d)
 
