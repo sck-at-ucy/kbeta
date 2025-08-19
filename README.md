@@ -26,9 +26,10 @@ This repository provides the optimiser implementation together with example work
 9. [Optimizers and settings](#optimizers-and-settings)
 10. [Companion repositories](#companion-repositories)
 11. [Tests & linting](#tests--linting)
-12. [Citation](#citation)
-13. [License](#license)
-14. [Contributing & roadmap](#contributing--roadmap)
+12. [Further reading](#further--reading)
+13. [Citation](#citation)
+14. [License](#license)
+15. [Contributing & roadmap](#contributing--roadmap)
 
 ---
 
@@ -300,7 +301,17 @@ pre-commit run --all   # run all hooks (if installed)
 Continuous Integration (CI) runs these checks automatically.
 
 ---
+### Further Reading & Related Resources 📚
 
+| Resource | Why it Matters for **Kourkoutas‑β** & **kbeta‑transformer2d** |
+|----------|--------------------------------------------------------------|
+| **MLX Beyond Language (repo)**<br>https://github.com/sck-at-ucy/MLX_BeyondLanguage | Companion project that demonstrates how to scale MLX Transformer workloads *beyond* conventional language‑model settings (e.g. vision & physics). Provides many of the coding conventions, dataset helpers and plotting utilities reused here. |
+| **MLX framework (Apple)**<br>https://github.com/ml-explore/mlx | The underlying tensor/NN library that powers both Kourkoutas‑β *and* the 2‑D Transformer. Understanding MLX’s compile/runtime model explains why adaptive optimisers like Kourkoutas‑β can hit full Metal GPU speed without custom CUDA kernels. |
+| **Article: *Soft‑max Momentum with Adaptive Variance…***<br>https://www.sciencedirect.com/science/article/pii/S2590123025009478 | The forthcoming paper describing Kourkoutas‑β in detail—mathematical derivation, convergence proofs and ablation studies. Read this to see why β₂ must be a dynamic *distribution* rather than a constant 0.999. |
+| **kbeta (core optimiser)**<br>https://github.com/sck-at-ucy/kbeta | Stand‑alone Python package implementing Kourkoutas‑β. `kbeta_transformer2d` imports `KourkoutasSoftmaxFlex` from *this* repo; all optimiser‑level issues/PRs belong there. |
+| **kbeta‑pinn3d (PINN benchmark)**<br>https://github.com/sck-at-ucy/kbeta-pinn3d | 3‑D Physics‑Informed Neural Network (PINN) workload that **collects β₂ “spike” diagnostics** during training. Useful if you want to compare how Kourkoutas‑β behaves on PDE‑constrained training vs. the fully data‑driven 2‑D Transformer shown here. |
+
+---
 ## Citation
 
 If you use this code or method in your research, please cite:
