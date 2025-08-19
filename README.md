@@ -19,10 +19,13 @@ This repository provides the optimiser implementation together with example work
 3. [Quick start](#quick-start)
 4. [Using Kourkoutas‑β in your own model](#minimal-example)
 5. [Example workloads](#example-workloads)
-6. [Tests & linting](#tests--linting)
-7. [Citation](#citation)
-8. [License](#license)
-9. [Contributing & roadmap](#contributing--roadmap)
+6. [Dataset and creation (verifiable)](#dataset-and-creation-verifiable)
+7. [Model and training protocol](#model-and-training-protocol)
+8. [Optimizers and settings](#optimizers-and-settings)
+9. [Tests & linting](#tests--linting)
+10. [Citation](#citation)
+11. [License](#license)
+12. [Contributing & roadmap](#contributing--roadmap)
 
 ---
 
@@ -94,7 +97,8 @@ pytest -q
 
 ## Minimal example
 
-```import time
+```python
+import time
 import mlx.core as mx
 import mlx.nn as nn
 from kbeta import KourkoutasBeta
@@ -123,7 +127,7 @@ def loss_fn(m):
 opt = KourkoutasBeta(learning_rate=lr)
 opt.init(model.parameters())
 
-grad_fn = nn.value_and_grad(model,loss_fn)
+grad_fn = nn.value_and_grad(loss_fn)
 
 tic = time.time()
 for _ in range(num_iters):
@@ -140,13 +144,77 @@ print(f"Loss={loss.item():.5f}, L2|w-w*|={error_norm:.5f}, Throughput={num_iters
 
 ## Example workloads
 
-| Folder | Paper section | What it shows | How to run |
-|--------|---------------|---------------|------------|
-| `examples/transformer_char_lm` | § 6.4 (Testbed D) | Character‑level LM on *small‑enwik8* | `python examples/transformer_char_lm/testbed_d.py --text ./data/small_enwik8.txt --opt kbeta` |
+### Transformer – Testbed D (Char-level LM on small-enwik8)
 
-The 2‑D Transformer (Heat2D, Testbed A) and 3‑D PINN (Heat3D, Testbed B) are released as separate repositories:
-- [kbeta-transformer2d](https://github.com/sck-at-ucy/kbeta-transformer2d)
-- [kbeta-pinn3d](https://github.com/sck-at-ucy/kbeta-pinn3d)
+All commands should be run from the **repo root**.
+👉Make sure you have generated `./data/small-enwik8.txt` as described below.
+
+Run the Transformer training with the same options used in the paper (adapted to the new script path):
+
+```bash
+  python -u examples/transformer_char_lm/testbed_d.py --text ./data/small-enwik8.txt     --steps 50001 --batch 4 --d_model 512 --n_layer 6 --n_head 8     --ctx 512 --lmin 16 --lmax 512 --warmup 250 --opt kbeta --adam_beta2 0.95     --layer_bucket per-array --barrier_every 100 --eval_every 500     --lr 1e-3     --seed "$seed" --fixed_eval_seed 1234 --deterministic --compile     --wd 0.0 --lr_schedule "1:1e-3,30000:5e-4,40000:1e-4,60000:1e-5"     2>&1 | tee "logs_enwik/kbeta_seed${seed}.log"
+```
+
+This reproduces a run that mirros the testbed reported in the paper with full logging under `logs_enwik/`.
+
+---
+
+### Dataset and creation (verifiable)
+
+We use the **first 30 MB of enwik8** (the classic Hutter Prize corpus).
+The slice is created deterministically:
+
+```bash
+curl -L -o enwik8.zip https://data.deepai.org/enwik8.zip
+unzip enwik8.zip
+head -c 30000000 enwik8 > small-enwik8.txt
+mkdir -p data && mv small-enwik8.txt data/
+```
+
+Checksums on our machine:
+
+```bash
+sha256sum enwik8
+# 2b49720e...c024a8
+
+sha256sum data/small-enwik8.txt
+# e0152eee...298b7
+```
+
+Re-creating `small-enwik8.txt` reproduced the same SHA‑256 (bit‑for‑bit identity).
+
+---
+
+### Model and training protocol
+
+As in the provided script, we train:
+
+* **Architecture**: 6‑block Transformer (`d_model=512`, `n_head=8`, FFN width = 4d)
+  GELU, LayerNorm, causal self‑attention; no dropout or weight decay.
+* **Data schedule**: variable sequence length with deterministic bucketing
+  \(L \in [16,512]\), rounded to multiples of 32; batch = 4; context window = 512.
+* **Steps**: 50,001
+* **Learning rate schedule**:
+  - 1e‑3 for steps 1 ≤ s < 30k
+  - 5e‑4 for 30k ≤ s < 40k
+  - 1e‑4 for 40k ≤ s ≤ 50k
+* **Evaluation**: fixed held‑out batch (length = 256, B = 128) reporting cross‑entropy and BPC.
+* **Runs**: 10 matched seeds (0–9).
+
+---
+
+### Optimizers and settings
+
+- **Kourkoutas‑β (ours)**:
+  β₁=0.9; dynamic β₂∈[0.88,0.999]; α=0.93 (EMA for sunspike); ε=1e‑8;
+  warm‑up=250 steps; `bias_correction="beta2max"`; per‑array stable buckets;
+  no AMSGrad/clip/adaptive‑tiny; diagnostics off.
+
+- **Adam‑95**:
+  MLX Adam (β₁=0.9, β₂=0.95, ε=1e‑8), bias correction on.
+
+- **Adam‑999**:
+  MLX Adam (β₁=0.9, β₂=0.999, ε=1e‑8), bias correction on.
 
 ---
 
@@ -166,7 +234,7 @@ Continuous Integration (CI) runs these checks automatically.
 
 If you use this code or method in your research, please cite:
 
-```
+```bibtex
 @article{Kassinos2025Kourkoutas,
   title   = {Kourkoutas-β: A Sunspike-Driven Adam Optimizer with Desert Flair},
   author  = {Stavros Kassinos},
