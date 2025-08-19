@@ -22,10 +22,11 @@ This repository provides the optimiser implementation together with example work
 6. [Dataset and creation (verifiable)](#dataset-and-creation-verifiable)
 7. [Model and training protocol](#model-and-training-protocol)
 8. [Optimizers and settings](#optimizers-and-settings)
-9. [Tests & linting](#tests--linting)
-10. [Citation](#citation)
-11. [License](#license)
-12. [Contributing & roadmap](#contributing--roadmap)
+9. [Companion repositories](#companion-repositories)
+10. [Tests & linting](#tests--linting)
+11. [Citation](#citation)
+12. [License](#license)
+13. [Contributing & roadmap](#contributing--roadmap)
 
 ---
 
