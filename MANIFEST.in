@@ -1,0 +1,15 @@
+# Always include core metadata
+include README.md
+include LICENSE
+include pyproject.toml
+
+# Exclude local data and logs
+recursive-exclude data *
+recursive-exclude logs_enwik *
+exclude enwik8
+exclude *.zip
+exclude *.txt
+
+# Explicitly exclude examples from wheels
+exclude examples/*
+recursive-exclude examples *

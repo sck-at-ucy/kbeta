@@ -5,26 +5,52 @@ build-backend = "setuptools.build_meta"
 [project]
 name            = "kbeta"
 version         = "1.0.1a0"
-description     = "Kourkoutas‑β optimiser and demo workloads"
-authors         = [{name = "Stavros Kassinos", email = "kassinos.stavros@ucy.ac.cy"}]
-readme          = "README.md"
+description     = "Kourkoutas-β optimiser and demo workloads"
+authors         = [{name = "Stavros Kassinos"}]
+readme          = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.9"
-dependencies    = ["mlx", "numpy"]
+dependencies    = ["mlx"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS :: MacOS X",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage      = "https://github.com/sck-at-ucy/kbeta"
+Documentation = "https://github.com/sck-at-ucy/kbeta"
+Repository    = "https://github.com/sck-at-ucy/kbeta"
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff", "build"]
+dev = [
+    "pytest",
+    "ruff",
+    "numpy",
+    "matplotlib",
+]
+
+repro = [
+    "mlx==0.26.3",
+    "pytest",
+    "ruff",
+    "numpy",
+    "matplotlib",
+]
 
 [tool.setuptools]
-package-dir = {"" = "src"}        # ← map root‑package namespace to “src/”
+package-dir = {"" = "src"}
 
-[tool.setuptools.packages.find]    # ← table header **must** end with “find”
-where = ["src"]                    # ← list (not a dict!)
+[tool.setuptools.packages.find]
+where   = ["src"]
+include = ["kbeta*"]
 
 [tool.setuptools.package-data]
 "kbeta" = ["py.typed"]
 
 # -------------------------------------------
-#  Ruff – linting & formatting configuration
+# Ruff configuration
 # -------------------------------------------
 [tool.ruff]
 target-version = "py311"
@@ -32,11 +58,9 @@ line-length    = 88
 src            = ["src", "examples"]
 exclude        = [".venv*", "tests/.venv*"]
 
-# ----- Linter rules -------------------------
 [tool.ruff.lint]
 select = ["E", "F", "B", "I", "UP"]
-ignore = ["E501"]       # long lines handled by formatter
+ignore = ["E501"]
 
-# ----- Formatter (Black‑compatible) ---------
 [tool.ruff.format]
 quote-style = "double"

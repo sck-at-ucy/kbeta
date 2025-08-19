@@ -13,6 +13,14 @@ Thumbs.db
 *.swp
 
 
+# Data artifacts
+data/
+enwik8
+*.zip
+*.txt
+logs_enwik/
+
+
 # virtual envs & editors
 .venv/
 venv/
@@ -62,3 +70,4 @@ examples/**/small-enwik8.txt
 
 # macOS
 *.DS_Store
+__pycache__/
