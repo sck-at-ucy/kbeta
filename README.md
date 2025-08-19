@@ -141,7 +141,8 @@ This installs the package in editable mode and makes all example scripts availab
 
 ## Minimal example
 
-```import time
+```python
+import time
 import mlx.core as mx
 import mlx.nn as nn
 from kbeta import KourkoutasBeta
