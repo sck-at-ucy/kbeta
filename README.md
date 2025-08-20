@@ -288,8 +288,6 @@ Other workloads from the paper are available in dedicated repositories:
 
 These companion repos share the same optimizer API and training protocol, so you can directly apply `KourkoutasBeta` with no code changes.
 
-🔒 These repos are temporarily private but will be made public in the *near* future.
-
 ---
 ## Tests & linting
 
